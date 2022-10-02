@@ -1,16 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" autoFlush="true"%>
+    
+    <%@ page import="pack_BBS.BoardBean" %>
+    <%@ page import="java.util.*" %>
+    
+    <jsp:useBean id="NoticeList" class="pack_BBS.BoardMgr" scope="page" />
+    
+    <%
+    request.setCharacterEncoding("UTF-8");
+    
+    int totalRecord = 0;        // 전체 데이터 수(DB에 저장된 row 개수)
+    int numPerPage = 5;    // 페이지당 출력하는 데이터 수(=게시글 숫자)
+    int pagePerBlock = 5;   // 블럭당 표시되는 페이지 수의 개수
+    int totalPage = 0;           // 전체 페이지 수
+    int totalBlock = 0;          // 전체 블록수
+    
+    
+    int nowPage = 1;          // 현재 (사용자가 보고 있는) 페이지 번호
+    int nowBlock = 1;         // 현재 (사용자가 보고 있는) 블럭
+
+    int start = 0;     // DB에서 데이터를 불러올 때 시작하는 인덱스 번호
+    int end = 5;     
+    
+    int listSize = 0;   
+    Vector <BoardBean> vList = NoticeList.getBoardList(start, end);
+    %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>Document</title>
 <link rel="shortcut icon" href="#">
-	<link rel="stylesheet" href="/A_teamProject/style/style_Common.css">
-	<link rel="stylesheet" href="/A_teamProject/style/style_Template.css">
-	<link rel="stylesheet" href="/A_teamProject/style/style_BBS.css">
-<script src="/A_teamProject/source/jquery-3.6.0.min.js"></script>
-	<script src="/A_teamProject/script/script_BBS.js"></script>
+	<link rel="stylesheet" href="/style/style_BBS.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="/script/script_Inquire.js"></script>
 </head>
 <body>
     <div id="wrap">
@@ -21,36 +45,58 @@
 		
 		
 			<div id="pageInfo" class="dFlex">
-			
-				<span>전체게시글 : 0 개 </span>
-				<span>페이지 : 1페이지</span>
+				<%
+				
+				listSize = vList.size();
+				
+				%>
+				
+				
+				<span>전체게시글 : <%=listSize %></span>
+				<span>페이지 : <%=nowPage %></span>
 			
 			
 			</div>
 		
-		
 		<table id="boardList">
 				<thead>
 					<tr>
-						<th>번호(num)</th>
-						<th>제목(subject)</th>
-						<th>이름(uid)</th>
-						<th>날짜(date)</th>
-						<th>조회수(readCnt)</th>
+						<th>번호</th>
+						<th>제목</th>
+						<th>내용</th>
+						<th>날짜</th>
+						<th>조회수</th>
 					</tr>		
 					<tr>
 						<td colspan="5" class="spaceTd"></td>
 					</tr>		
 				</thead>
 				<tbody>
-					<tr>
-						<td>num</td>
-						<td>subject</td>
-						<td>uid</td>
-						<td>date</td>
-						<td>readCnt</td>
-					</tr>
 				
+				
+				
+				<% 
+				for (int i=0; i<listSize; i++) {		
+					
+					if(i==listSize) break;
+					
+					BoardBean bean = vList.get(i);
+			
+				%>
+			
+		
+				
+					<tr class="listTr" onclick="modify('<%=bean.getNum()%>','<%=nowPage%>')">
+					
+					
+						<td><%=bean.getNum() %></td>
+						<td><%=bean.getaName() %></td>
+						<td><%=bean.getAsubject() %></td>
+						<td><%=bean.getRegTM() %></td>
+						<td><%=bean.getReadCnt() %></td>
+					</tr>
+				<% } %>
+				</form>
 				</tbody>
 				<tfoot>
 				
@@ -78,7 +124,7 @@
 									</div>			
 									<div id="keyWordInput" >
 										<input type="text" name="keyWord" id="keyWord"
-										size="20" maxlength="30" value="안녕">
+										size="20" maxlength="30" value="">
 									
 									
 									</div>	

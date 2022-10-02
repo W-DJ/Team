@@ -18,6 +18,7 @@ List<MemberBean> objList = objMgr.mtd_Select();
 	</head>
   <body>
 	<div id="MemListWrap">
+	<iframe src="/indd/header.jsp" scrolling="no" width="100%" frameborder=0></iframe>
 	<table>
 		<tbody>
 			<tr>
@@ -69,6 +70,7 @@ List<MemberBean> objList = objMgr.mtd_Select();
 			
 		</tbody>
 	</table>
+	<iframe src="/indd/footer.jsp" scrolling="no" width="100%" frameborder=0></iframe>
 	</div>
 	<!--div#wrap-->
   </body>

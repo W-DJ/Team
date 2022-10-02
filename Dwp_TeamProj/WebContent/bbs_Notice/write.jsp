@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="/style/style.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="/script/script.js"></script>
+<script src="/script/script_Inquire.js"></script>
 </head>
 <body>
 	<div id="wrap">
@@ -86,6 +86,7 @@
 		</aside>
 			
 			
+			<input type="hidden" name="ip" id="ip" value="<%=request.getRemoteAddr()%>"/>
 			
 
 		</form>

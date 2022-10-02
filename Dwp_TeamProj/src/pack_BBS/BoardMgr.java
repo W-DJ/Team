@@ -29,7 +29,7 @@ public class BoardMgr {
 	Statement				 	objStmt 		= 		null;
 	ResultSet 					objRS 			= 		null;
 	
-	private static final String SAVEFOLER = "D:/Bigdata_Java_220511/ych/silsp/p07_JSP/Dwp_TeamProj/WebContent/fileUpload";
+	private static final String SAVEFOLER = "D:/Bigdata_Java_220511/DJ/silsp/p07_JSP/Dwp_TeamProj/WebContent/fileUpload";
 	// 작업자의 워크스페이스가 다르다면 파일이 업로드되는 경로도 그에 맞게 설정해야 함.
 	private static String encType = "UTF-8";
 	private static int maxSize = 5 * 1024 * 1024;
@@ -53,6 +53,7 @@ public class BoardMgr {
 		int fileSize = 0;
 		String oriFileName = null;
 		String systemFileName = null;
+		String ip="";
 		
 		int rtnCnt = 0;
 
@@ -60,14 +61,14 @@ public class BoardMgr {
 			
 			
 			objConn = objPool.getConnection();
-			sql = "select max(num) from inquireTbl";
+			sql = "select max(num) from adminWriteTbl";
 			objPstmt = objConn.prepareStatement(sql);
 			objRS = objPstmt.executeQuery();
 
 			int ref = 1; // 답변글 작성용, 원본글의 글번호(num)와 일치
 			if (objRS.next())
 				ref = objRS.getInt(1) + 1;
-			// 현재 DB inquireTbl에 데이터가 3개(num 컬럼에 1, 2, 3)가
+			// 현재 DB adminWriteTbl에 데이터가 3개(num 컬럼에 1, 2, 3)가
 			// 있다고 가정하면 max(num)는 3을 반환함. 
 			// 그러므로 새 글번호를 참조하는 DB의 컬럼 ref는 4가 됨.
 
@@ -91,20 +92,20 @@ public class BoardMgr {
 					fileSize = (int) multi.getFile("upFileName").length();
 				}
 				 
-
+			 BoardBean bean = new BoardBean();
 			
-			sql = "insert into inquireTbl (uid, uName, bbsPw, subject, qnaType, content, regTM, pos, ref, depth, ip, readCnt, oriFileName, systemFileName, fileSize ) ";
-			sql += " values ( ?, ?, ?, ?, ?, ?, now(), 0, ?, 0, ?, 0, ?, ?, ?)";
+			sql = "insert into adminWriteTbl (aName, asubject, acontent, pos, ref, depth,regTM, ip, readCnt, oriFileName, systemFileName, fileSize ) ";
+			sql += " values ( ?, ?, ?, ?, ?, ?, now(), ?, ?, ?, ?, ?)";
 			  
 			  objPstmt = objConn.prepareStatement(sql); 
-			  objPstmt.setString(1, multi.getParameter("uid")); 
-			  objPstmt.setString(2, multi.getParameter("uName")); 
-			  objPstmt.setString(3, multi.getParameter("bbsPw")); 
-			  objPstmt.setString(4, multi.getParameter("subject")); 
-			  objPstmt.setString(5, multi.getParameter("qnaType")); 
-			  objPstmt.setString(6, multi.getParameter("content"));
-			  objPstmt.setInt(7, ref);
-			  objPstmt.setString(8, multi.getParameter("ip"));
+			  objPstmt.setString(1, multi.getParameter("aName")); 
+			  objPstmt.setString(2, multi.getParameter("asubject")); 
+			  objPstmt.setString(3, multi.getParameter("acontent"));
+			  objPstmt.setInt(4, bean.getPos());
+			  objPstmt.setInt(5, bean.getRef());
+			  objPstmt.setInt(6, bean.getDepth());
+			  objPstmt.setString(7, ip);
+			  objPstmt.setInt(8, bean.getReadCnt());
 			  objPstmt.setString(9,oriFileName); 
 			  objPstmt.setString(10, systemFileName); 
 			  objPstmt.setLong(11, fileSize); 
@@ -119,18 +120,102 @@ public class BoardMgr {
 		} finally {
 			objPool.freeConnection(objConn, objPstmt);
 		}
-				
-		
-		return rtnCnt;
+		return rtnCnt;	
 		
 	}
 	/*  게시판 입력(/bbs/postProc.jsp) 끝  */
 	
 	
+	/*  1:1 문의 입력(/입력(/bbs_Inquire/write.jsp) 시작  */
+	public int inquireBoard(HttpServletRequest req) {
+
+		String sql = null;
+		MultipartRequest multi = null;
+		int fileSize = 0;
+		String oriFileName = null;
+		String systemFileName = null;
+		String ip="";
+		
+		int rtnCnt = 0;
+
+		try {
+			
+			
+			objConn = objPool.getConnection();
+			sql = "select max(num) from inquireTbl";
+			objPstmt = objConn.prepareStatement(sql);
+			objRS = objPstmt.executeQuery();
+
+			int ref = 1; // 답변글 작성용, 원본글의 글번호(num)와 일치
+			if (objRS.next())
+				ref = objRS.getInt(1) + 1;
+			// 현재 DB adminWriteTbl에 데이터가 3개(num 컬럼에 1, 2, 3)가
+			// 있다고 가정하면 max(num)는 3을 반환함. 
+			// 그러므로 새 글번호를 참조하는 DB의 컬럼 ref는 4가 됨.
+
+			File file = new File(SAVEFOLER);
+
+			if (!file.exists())
+				file.mkdirs();
+
+			
+			 multi = new MultipartRequest(
+					 req,
+					 SAVEFOLER,
+					 maxSize,
+					 encType,
+					 new DefaultFileRenamePolicy()
+					 );
+			 
+			 if (multi.getFilesystemName("upFileName") != null) {
+				 	oriFileName = multi.getOriginalFileName("upFileName");
+				 	systemFileName  = multi.getFilesystemName("upFileName");
+					fileSize = (int) multi.getFile("upFileName").length();
+				}
+				 
+			 BoardBean bean = new BoardBean();
+			
+			sql = "insert into inquireTbl (uid ,uName, subject, content, bbsPw, qnaType	, pos, ref, depth,regTM, ip, readCnt, oriFileName, systemFileName, fileSize ) ";
+			sql += " values ( ?,?,?,?, ?, ?, ?, ?, ?, now(), ?, ?, ?, ?, ?)";
+			  
+			  objPstmt = objConn.prepareStatement(sql); 
+			  objPstmt.setString(1, multi.getParameter("uid")); 
+			  objPstmt.setString(2, multi.getParameter("uName")); 
+			  objPstmt.setString(3, multi.getParameter("subject")); 
+			  objPstmt.setString(4, multi.getParameter("content"));
+			  objPstmt.setString(5, multi.getParameter("bbsPw"));
+			  objPstmt.setString(6, multi.getParameter("qnaType"));
+			  objPstmt.setInt(7, bean.getPos());
+			  objPstmt.setInt(8, bean.getRef());
+			  objPstmt.setInt(9, bean.getDepth());
+			  objPstmt.setString(10, ip);
+			  objPstmt.setInt(11, bean.getReadCnt());
+			  objPstmt.setString(12,oriFileName); 
+			  objPstmt.setString(13, systemFileName); 
+			  objPstmt.setLong(14, fileSize); 
+			  
+			  rtnCnt = objPstmt.executeUpdate();
+	  
+	  
+		/* System.out.println(rtnCnt); */
+	 
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			objPool.freeConnection(objConn, objPstmt);
+		}
+		return rtnCnt;	
+		
+	}
+	/*  1:1문의 입력(/bbs_Inquire/write.jsp) 끝  */
+	
+	
+	
+	
 
 
-	/*  게시판 리스트 출력 (/bbs/list.jsp) 시작    */
-	public Vector<BoardBean> getBoardList(String keyField, String keyWord, int start, int end) {
+	/*  공지사항 게시판 리스트 출력 (/bbs_Notice/noticebbs.jsp) 시작    */
+	public Vector<BoardBean> getBoardList( int start, int end) {
 
 		Vector<BoardBean> vList = new Vector<>();
 		String sql = null;
@@ -139,24 +224,17 @@ public class BoardMgr {
 			objConn = objPool.getConnection(); //DbCp로 연동
 			
 			
-			if (keyWord.equals("null") || keyWord.equals("")) {
+		
 				// 검색어가 없을 경우
-				sql = "select * from inquireTbl "
+				sql = "select * from adminWriteTbl "
 						+ "order by ref desc, pos asc limit ?, ?"; //start 와 end
 				//DB에서는 ref  가 같으면 먼저 입력된글이 위로 올라온다. 
 				objPstmt = objConn.prepareStatement(sql);
 				objPstmt.setInt(1, start);
 				objPstmt.setInt(2, end);
-			} else {
-				// 검색어가 있을 경우
-				sql = "select * from inquireTbl "
-						+ "where "+ keyField +" like ? "
-						+ "order by ref desc, pos asc limit ?, ?";
-				objPstmt = objConn.prepareStatement(sql);
-				objPstmt.setString(1, "%"+keyWord+"%");
-				objPstmt.setInt(2, start);
-				objPstmt.setInt(3, end);				
-			}
+			
+						
+			
 			
 			
 			objRS = objPstmt.executeQuery();
@@ -164,8 +242,9 @@ public class BoardMgr {
 			while (objRS.next()) {
 				BoardBean bean = new BoardBean();
 				bean.setNum(objRS.getInt("num"));
-				bean.setuName(objRS.getString("uName"));
-				bean.setSubject(objRS.getString("subject"));
+				bean.setaName(objRS.getString("aName"));
+				bean.setAsubject(objRS.getString("asubject"));
+				bean.setAcontent(objRS.getString("acontent"));
 				bean.setPos(objRS.getInt("pos"));
 				bean.setRef(objRS.getInt("ref"));
 				bean.setDepth(objRS.getInt("depth"));
@@ -183,8 +262,64 @@ public class BoardMgr {
 	}
 
 
-	/*  게시판 리스트 출력(/bbs/list.jsp) 끝  */
+	/*  공지사항 게시판 리스트 출력 (/bbs_Notice/noticebbs.jsp) 끝  */
 
+	
+	/*  공지사항 게시판 리스트 출력 (/bbs_Notice/noticebbs.jsp) 시작    */
+	public Vector<BoardBean> getInquireList( int start, int end) {
+
+		Vector<BoardBean> vList = new Vector<>();
+		String sql = null;
+
+		try {
+			objConn = objPool.getConnection(); //DbCp로 연동
+			
+			
+		
+				// 검색어가 없을 경우
+				sql = "select * from inquireTbl "
+						+ "order by ref desc, pos asc limit ?, ?"; //start 와 end
+				//DB에서는 ref  가 같으면 먼저 입력된글이 위로 올라온다. 
+				objPstmt = objConn.prepareStatement(sql);
+				objPstmt.setInt(1, start);
+				objPstmt.setInt(2, end);
+			
+						
+			
+			
+			
+			objRS = objPstmt.executeQuery();
+
+			while (objRS.next()) {
+				BoardBean bean = new BoardBean();
+				bean.setNum(objRS.getInt("num"));
+				bean.setuId(objRS.getString("uid"));
+				bean.setuName(objRS.getString("uName"));
+				bean.setSubject(objRS.getString("subject"));
+				bean.setContent(objRS.getString("content"));
+				bean.setPos(objRS.getInt("pos"));
+				bean.setRef(objRS.getInt("ref"));
+				bean.setDepth(objRS.getInt("depth"));
+				bean.setRegTM(objRS.getString("regTM"));
+				bean.setReadCnt(objRS.getInt("readCnt"));
+				bean.setSystemFileName(objRS.getString("systemFileName"));
+				bean.setFileSize(objRS.getInt("fileSize"));
+				vList.add(bean);
+			}
+		} catch (Exception e) {
+			System.out.println("Exception : " + e.getMessage());
+		} finally {
+			objPool.freeConnection(objConn, objPstmt, objRS);
+		}
+
+		return vList;
+	}
+
+
+	/*  공지사항 게시판 리스트 출력 (/bbs_Notice/noticebbs.jsp) 끝  */
+
+	
+	
 	
 
 	/* 총 게시물 수(/bbs/list.jsp) 시작  */
@@ -197,10 +332,10 @@ public class BoardMgr {
 			objConn = objPool.getConnection();
 			
 			if(keyWord.equals("null") || keyWord.equals("")) {
-				sql = "select count(*) from inquireTbl";
+				sql = "select count(*) from adminWriteTbl";
 				objPstmt = objConn.prepareStatement(sql);
 			} else {
-				sql = "select count(*) from inquireTbl ";
+				sql = "select count(*) from adminWriteTbl ";
 				sql += "where "+keyField+" like ?";
 				objPstmt = objConn.prepareStatement(sql);
 				objPstmt.setString(1, "%" + keyWord + "%");
@@ -232,7 +367,7 @@ public class BoardMgr {
 
 		try {
 			objConn = objPool.getConnection();
-			sql = "update inquireTbl set readCnt = readCnt+1 where num=?";
+			sql = "update adminWriteTbl set readCnt = readCnt+1 where num=?";
 			objPstmt = objConn.prepareStatement(sql);
 			objPstmt.setInt(1, num);
 			objPstmt.executeUpdate();
@@ -255,26 +390,26 @@ public class BoardMgr {
 		BoardBean bean = new BoardBean();
 		try {
 			objConn = objPool.getConnection(); 
-			sql = "select * from inquireTbl where num=?";
+			sql = "select * from adminWriteTbl where num=?";
 			objPstmt = objConn.prepareStatement(sql);
 			objPstmt.setInt(1, num);
 			objRS = objPstmt.executeQuery();
 
 			if (objRS.next()) {
 				bean.setNum(objRS.getInt("num"));
-				bean.setuId(objRS.getString("uId"));
-				bean.setuName(objRS.getString("uName"));
-				bean.setSubject(objRS.getString("subject"));
-				bean.setContent(objRS.getString("content"));
+				bean.setaName(objRS.getString("aName"));
+				bean.setAsubject(objRS.getString("asubject"));
+				bean.setAcontent(objRS.getString("acontent"));
 				bean.setPos(objRS.getInt("pos"));
 				bean.setRef(objRS.getInt("ref"));
 				bean.setDepth(objRS.getInt("depth"));
 				bean.setRegTM(objRS.getString("regTM"));
+				bean.setIp(objRS.getString("ip"));
 				bean.setReadCnt(objRS.getInt("readCnt"));
 				bean.setOriFileName(objRS.getString("oriFileName"));
 				bean.setSystemFileName(objRS.getString("systemFileName"));
 				bean.setFileSize(objRS.getInt("fileSize"));
-				bean.setIp(objRS.getString("ip"));
+				
 			}
 
 		} catch (Exception e) {
@@ -337,7 +472,7 @@ public class BoardMgr {
 			objConn = objPool.getConnection();
 
 			//////////// 게시글의 파일 삭제 시작 ///////////////
-			sql = "select fileName from inquireTbl where num=?";
+			sql = "select systemFileName from adminWriteTbl where num=?";
 			objPstmt = objConn.prepareStatement(sql);
 			objPstmt.setInt(1, num);
 			objRS = objPstmt.executeQuery();
@@ -355,7 +490,7 @@ public class BoardMgr {
 			//////////// 게시글의 파일 삭제 끝 ///////////////
 
 			//////////// 게시글 삭제 시작 ///////////////
-			sql = "delete from inquireTbl where num=?";
+			sql = "delete from adminWriteTbl where num=?";
 			objPstmt = objConn.prepareStatement(sql);
 			objPstmt.setInt(1, num);
 			exeCnt = objPstmt.executeUpdate();
@@ -381,12 +516,11 @@ public class BoardMgr {
 
 		try {
 			objConn = objPool.getConnection();
-			sql = "update inquireTbl set uName=?, subject=?, content=? where num=?";
+			sql = "update adminWriteTbl set asubject=?, acontent=? where num=?";
 			objPstmt = objConn.prepareStatement(sql);
-			objPstmt.setString(1, bean.getuName());
-			objPstmt.setString(2, bean.getSubject());
-			objPstmt.setString(3, bean.getContent());
-			objPstmt.setInt(4, bean.getNum());
+			objPstmt.setString(1, bean.getAsubject());
+			objPstmt.setString(2, bean.getAcontent());
+			objPstmt.setInt(3, bean.getNum());
 			exeCnt = objPstmt.executeUpdate();
 			// exeCnt : DB에서 실제 적용된 데이터(=row, 로우)의 개수 저장됨
 
@@ -413,7 +547,7 @@ public class BoardMgr {
 		try {
 			objConn = objPool.getConnection(); 
 
-			sql = "insert into inquireTbl (";
+			sql = "insert into adminWriteTbl (";
 			sql += "uName, content, subject, ";
 			sql += "ref, pos, depth,  ";
 			sql += "regTM, readCnt, ip) values (";
@@ -455,7 +589,7 @@ public class BoardMgr {
 			objConn = objPool.getConnection();
 
 			//////////// 게시글의 포지션 증가 시작 ///////////////
-			sql = "update inquireTbl set pos = pos + 1 ";
+			sql = "update adminWriteTbl set pos = pos + 1 ";
 			sql += "where ref = ? and pos > ?";
 			
 			objPstmt = objConn.prepareStatement(sql);

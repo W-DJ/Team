@@ -49,15 +49,17 @@ String aId_Session = (String)session.getAttribute("aId_Session");  %>
 	           </div> 
 	            <!--  상품템플릿 시작, iframe으로 변경 -->
 	            <iframe src="/indd/footer.jsp" scrolling="no" width="100%" frameborder=0></iframe>
-	<div id="sideBar">
-	<ul>
-	<li><img src="/img/새벽.png" alt="" /></li>
-	<li><a href="">고객센터</a></li>
-	<li><a href="">마이페이지</a></li>
-	<li><a href="">이벤트</a></li>
-	</ul>
-	</div>
-	<div id="topBtnArea">&uarr;</div>
+	        <aside>
+	        <div id="sideBar">
+					<ul>
+					<li><img src="/img/새벽.png" alt="" /></li>
+					<li><a href="">고객센터</a></li>
+					<li><a href="">마이페이지</a></li>
+					<li><a href="">이벤트</a></li>
+					</ul>
+			</div>
+			<div id="topBtnArea">&uarr;</div>
+			</aside>
 	</div>
 	<!--div#wrap-->
   </body>

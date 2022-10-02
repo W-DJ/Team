@@ -47,14 +47,8 @@ int end = 5;     // 시작하는 인덱스 번호부터 반환하는(=출력하�
 int listSize = 0;    // 1페이지에서 보여주는 데이터 수
 						//출력할 데이터의 개수 = 데이터 1개는 가로줄 1개
 
-// 게시판 검색 관련소스
-String keyField = ""; // DB의 컬럼명
-String keyWord = ""; // DB의 검색어
 						
-if (request.getParameter("keyWord") != null) {
-	keyField = request.getParameter("keyField");
-	keyWord = request.getParameter("keyWord");
-}
+
 
 
 						
@@ -77,8 +71,6 @@ if (request.getParameter("nowPage") != null) { // nowpage 값을 전달하고 �
 3페이지    80~71
 */
 
-totalRecord = lMgr.getTotalCount(keyField, keyWord);   
-// 전체 데이터 수 반환
 
 totalPage = (int)Math.ceil((double)totalRecord/numPerPage);       //전체글 나누기 / 페이지당 출력 글수 = totalPage Math.ceil 올림 round반올림 flour내림
 nowBlock = (int)Math.ceil((double)nowPage/pagePerBlock);			//0.2 올림 1됨
@@ -114,12 +106,8 @@ totalBlock = (int)Math.ceil((double)totalPage/pagePerBlock);		//0.2 올림 1됨.
     		<div id="contents" class="bbsList">
     		
     		<%
-				String prnType = "";
-				if (keyWord.equals("null") || keyWord.equals("")) {
-					prnType = "전체 게시글";
-				} else {
-					prnType = "검색 결과";
-				}
+				String prnType ="전체 게시글";
+			
 			%>
     		
 	    		<div id="pageInfo" class="dFlex">
@@ -146,7 +134,7 @@ totalBlock = (int)Math.ceil((double)totalPage/pagePerBlock);		//0.2 올림 1됨.
 	
 			
 			<%
-			vList = lMgr.getBoardList(keyField, keyWord, start, end);  // DB에서 데이터 불러오기
+			vList = lMgr.getInquireList( start, end);  // DB에서 데이터 불러오기
 			listSize = vList.size();			
 			
 				if (vList.isEmpty()) {
@@ -213,11 +201,11 @@ totalBlock = (int)Math.ceil((double)totalPage/pagePerBlock);		//0.2 올림 1됨.
 					
 					<tr id="listBtnArea">
 						<td colspan="2">
-						 <% if (uId_Session == null && aId_Session == null) { %>
+						 
 							<button type="button" id="loginAlertBtn" class="listBtnStyle">글쓰기</button>
-						<% } else { %> 
+					
 							<button type="button" id="writeBtn" class="listBtnStyle">글쓰기</button>
-					 	<% } %> 
+					 	
 						</td>
 						
 						<td colspan="3">
@@ -228,27 +216,20 @@ totalBlock = (int)Math.ceil((double)totalPage/pagePerBlock);		//0.2 올림 1됨.
 								<div>
 									<select name="keyField" id="keyField">
 										<option value="subject" 
-												<% if(keyField.equals("subject")) out.print("selected"); %>>제  목</option>
+												>제  목</option>
 										<option value="uName" 
-												<% if(keyField.equals("uName")) out.print("selected"); %>>이  름</option>
+												>이  름</option>
 										<option value="content" 
-												<% if(keyField.equals("content")) out.print("selected"); %>>내  용</option>
+												>내  용</option>
 									</select>
 								</div>
-								<div>
-									<input type="text" name="keyWord" id="keyWord"
-									  id="keyWord" size="20" maxlength="30" value="<%=keyWord%>">
-								</div>
+							
 								<div>
 									<button type="button" id="searchBtn" class="listBtnStyle">검색</button>
 								</div>
 															
 							</form>
-							
-							<!-- 검색결과 유지용 매개변수 데이터시작 -->
-							<input type="hidden" id="pKeyField" value="<%=keyField%>">
-							<input type="hidden" id="pKeyWord" value="<%=keyWord%>">
-							<!-- 검색결과 유지용 매개변수 데이터끝 -->
+
 						
 						</td>
 					</tr>  <!-- tr#listBtnArea -->

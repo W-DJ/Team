@@ -12,10 +12,13 @@
 </head>
 <body>
 	<div id="wrap">
-     <h1>로그인</h1>
+	 
      <form action="/Member/Login_Proc.jsp">
+     <fieldset>
+     <legend>로그인</legend>
      아이디<input type="text" name="uId" id="uId" /><br><br>
      비밀번호<input type="password" name="uPw" id="uPw" />
+     </fieldset>
      <button>로그인하기</button>
      </form>
 	</div>

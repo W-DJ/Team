@@ -18,6 +18,29 @@ public class BoardBean {
 	private String oriFileName;  // 첨부파일 원본 이름
 	private String systemFileName; // 첨부파일 서버 저장 이름
 	private int fileSize;         // 첨부파일 크기
+	private String aName;
+	private String asubject;
+	private String acontent;
+	public String getaName() {
+		return aName;
+	}
+	public void setaName(String aName) {
+		this.aName = aName;
+	}
+	public String getAsubject() {
+		return asubject;
+	}
+	public void setAsubject(String asubject) {
+		this.asubject = asubject;
+	}
+	public String getAcontent() {
+		return acontent;
+	}
+	public void setAcontent(String acontent) {
+		this.acontent = acontent;
+	}
+	
+	
 	public int getNum() {
 		return num;
 	}

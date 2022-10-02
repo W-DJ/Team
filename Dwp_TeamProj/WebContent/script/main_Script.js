@@ -1,6 +1,25 @@
 $(function() {
-setInterval(fnSlide, 7000);
+	$("button#joinBtn").click(function(){
+		window.parent.location.href="/Member/Join.jsp";
+		});
+	$("button#loginBtn").click(function(){
+		window.parent.location.href="/Member/Login.jsp";
+	});
+	$("button#MypageBtn").click(function(){
+		window.parent.location.href="/Member/MyPage.jsp";
+	});
+	$("button.InquireBtn").click(function(){
+		window.parent.location.href="/bbs_Notice/ServiceMain.jsp";
+	});
+	$("button#PrListBtn").click(function(){
+		window.parent.location.href="/product/prodList.jsp";
+	});
 	
+	function home() {
+	location.href='/bbs_Notice/noticebbs.jsp';
+	}
+	
+setInterval(fnSlide, 4000);
 	
 	function fnSlide() {
 		
@@ -26,7 +45,6 @@ setInterval(fnSlide, 7000);
         });
         $("div#topBtnArea").click(function(){
             $(window).scrollTop(0);
-        })
-	
-	}
+        });
+   }
 	});

@@ -6,10 +6,9 @@
 <meta charset="UTF-8">
 <title>문의페이지</title>
 <link rel="shortcut icon" href="#">
-	<link rel="stylesheet" href="/A_teamProject/style/style_Common.css">
-	<link rel="stylesheet" href="/A_teamProject/style/style_Template.css">
-	<link rel="stylesheet" href="/A_teamProject/style/style_BBS.css">
-<script src="/A_teamProject/source/jquery-3.6.0.min.js"></script>
+	<link rel="stylesheet" href="/style/style_BBS.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="/script/script_Inquire.js"></script>
 </head>
 <body>
@@ -93,7 +92,7 @@
 			</div>
 		<!-- 내가 올린 문의글 -->
 		<!-- 회원 정보 DB에 내가 올린 문의글 컬럼도 있어야함. -->
-		<button type="button" id="inqBtn" onclick="location.href='/A_teamProject/bbs_Inquire/write.jsp'">문의하기</button>
+		<button type="button" id="inqBtn" onclick="location.href='/bbs_Inquire/write.jsp'">문의하기</button>
 		
 		
 		</div>

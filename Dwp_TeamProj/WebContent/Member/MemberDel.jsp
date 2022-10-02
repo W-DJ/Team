@@ -12,6 +12,7 @@
 	</head>
   <body>
 	<div id="wrap">
+	<iframe src="/indd/header.jsp" scrolling="no" width="100%" frameborder=0></iframe>
 	<form action="/Member/MemberDel_Proc.jsp">
 	 <fieldset>
 	 <legend>비밀번호 확인</legend>
@@ -19,6 +20,7 @@
 	  <button>전송</button>
 	 </fieldset>
 	 </form>
+	 <iframe src="/indd/footer.jsp" scrolling="no" width="100%" frameborder=0></iframe>
 	</div>
 	<!--div#wrap-->
   </body>

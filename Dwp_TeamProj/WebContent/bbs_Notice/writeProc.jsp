@@ -20,7 +20,10 @@ out.print(ip); */
 int rtnCnt = bbsMgr.insertBoard(request);
 
 if(rtnCnt==1){
-response.sendRedirect("/bbs_Notice/noticebbs.jsp");
 	
+response.sendRedirect("/bbs_Notice/noticebbs.jsp");
+} else {
+	//
 }
+	
 %>

@@ -14,6 +14,7 @@
 	  <link rel="shorcut icon" href="#">
 	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	  <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+	  <script src ="/script/main_Script.js"></script>
 	  <script src="/script/Search.js"></script>
 	</head>
   <body>
@@ -24,34 +25,38 @@
 	 <% if (uId_Session == null && aId_Session == null) { %>
 	 <ul class="dFlex">
 	 	  <li>
-	 	      <button onclick="fnJoin()">회원가입</button>
+	 	      <button type="button" id="joinBtn">회원가입</button>
 	 	  </li>
 	 	        <li class="bar">|<li>
 	 	  <li>
-	 	       <button onclick ="fnLogin()">로그인</button>
+	 	       <button type="button" id="loginBtn">로그인</button>
 	 	  </li>
 	 	        <li class="bar">|<li>
 	 	  <li>
-	 	        <button onclick = "fnMypage()">마이페이지</button>
+	 	        <button type="button" id="MypageBtn">마이페이지</button>
 	 	  </li>
 	 	         <li class="bar">|<li>
 	 	  <li>
-	 	       <button onclick="fnInquire()">고객센터</button>
+	 	       <button type="button" class="InquireBtn">고객센터</button>
 	 	 </li>
 	 	        <li class="bar">|<li>
 	 	 <li>
-	 	      <button onclick="fnProd()">상품게시판</button>
+	 	      <button type="button" id="PrListBtn">상품게시판</button>
 	 	 </li>
 	 </ul>
 	 <% } else if (uId_Session != null || aId_Session != null) { %>
 	 <ul class="dFlex">
-	 <li><a href="">홈</a></li>
+	 <li>
+	 <a href="">홈</a>
+	 </li>
 	 	<li>|<li>
 	 	<li><a href="">로그아웃</a></li>
 	 	<li>|<li>
-	 	<li><a href="/Member/MyPage.jsp">마이페이지</a></li>
+	 	<li><a href="">마이페이지</a></li>
 	 	<li>|<li>
-	 	<li><a href="/bbs_Notice/noticebbs.jsp">고객센터</a></li>
+	 	<li>
+	 	<button type="button" class="InquireBtn">고객센터</button>
+	 	</li>
 	 </ul>
 	 <%}%>
 	 </div>

@@ -156,7 +156,7 @@ public class MemberMgr {
 			objConn = objPool.getConnection();		
 			
 			String sql = "select uId,uPw,uName,uEmail,";
-					 sql+= "uPhone,uAge,uAddr,uGender,uBirth";
+					 sql+= " uPhone,uAge,uAddr,uGender,uBirth";
 					 sql+= " from memberList where uId = ?";
 			objPstmt = objConn.prepareStatement(sql);
 			objPstmt.setString(1, uId);

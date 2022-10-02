@@ -1,10 +1,12 @@
 <%@page import="pack_Member.MemberBean"%>
+<%@page import="pack_BBS.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" autoFlush="true"%>
 <%
 	String uId_Session = (String)session.getAttribute("uId_Session"); 
 	String aId_Session = (String)session.getAttribute("aId_Session");
 %>
+<jsp:useBean id="lMgr" class="pack_BBS.BoardMgr" />
 <jsp:useBean id="mMgr" class="pack_Member.MemberMgr" />
 <%
 MemberBean objMB  = mMgr.modifyMember(uId_Session);
@@ -62,6 +64,16 @@ String uName = objMB.getuName();
 								<input type="text" name="subject" id="subject">
 							</td>
 						</tr>
+						<tr>
+							<td>연락처</td>
+							<td>
+								<input type="text" name="uPhone1" class="uPhone">
+								<input type="text" name="uPhone2" class="uPhone">
+								<input type="text" name="uPhone3" class="uPhone">
+								
+							</td>
+						</tr>
+							
 							
 						<tr>
 							<td colspan="2">

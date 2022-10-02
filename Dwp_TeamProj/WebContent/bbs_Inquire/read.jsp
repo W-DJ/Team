@@ -142,7 +142,7 @@ String ip	= bean.getIp();
 									// out.print("uId_Session : "+ uId_Session + "<br>" + "uId : "+ uId);
 									if (uId_Session.equals(uId))  { 
 								%> --%>
-								<button type="button" id="modBtn">수 정</button>
+								<button type="button" id="modInqBtn">수 정</button>
 								<button type="button" id="delBtn">삭 제</button>
 								<%-- <% } %> --%>
 							</td>

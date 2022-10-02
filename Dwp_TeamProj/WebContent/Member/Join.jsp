@@ -14,6 +14,7 @@
 	</head>
   <body>
 	<div id="wrap">
+	<iframe src="/indd/header.jsp" scrolling="no" width="100%" frameborder=0></iframe>
 	   <div id="container">
 	   	<div id="title">회원가입</div>
 	    <span>필수입력사항</span>
@@ -161,6 +162,7 @@
 	     </form>
 	   </div>
 	   <!-- div#container 끝-->
+	   <iframe src="/indd/footer.jsp" scrolling="no" width="100%" frameborder=0></iframe>
 	</div>
 	<!--div#wrap 끝 -->
   </body>
